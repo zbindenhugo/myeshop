@@ -6,6 +6,7 @@ import NotFound from './pages/notfound/NotFound';
 import Navigation from './navigation/Navigation';
 import Products from './pages/Products/Products';
 import Product from './pages/Products/Product';
+import ProductsCategory from './pages/Products/ProductsCategory';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route path='/products' element={<Products />} />
         <Route path='/product/:id' element={<Product />} />
+        <Route path='/category/:id' element={<ProductsCategory />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
     </>
