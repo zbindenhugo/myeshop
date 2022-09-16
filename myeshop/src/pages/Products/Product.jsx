@@ -51,7 +51,7 @@ export default function Product() {
                     </li>
                     <li>
                         <div className="flex items-center">
-                            <Link to={'/categories/' + product.category} className="mr-2 text-sm font-medium text-gray-900 capitalize">
+                            <Link to={'/category/' + product.category} className="mr-2 text-sm font-medium text-gray-900 capitalize">
                                 {product.category}
                             </Link>
                             <svg

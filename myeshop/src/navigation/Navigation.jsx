@@ -12,6 +12,8 @@ export default function Navigation(){
     const [categories, setCategories] = useState([]);
     const [isOpen, setIsOpen] = useState(false)
 
+    alert(window.location.pathname.split('/'))
+
     useEffect(() => {
       const fetchCat = async () => {
         const datas = await fetch('https://fakestoreapi.com/products/categories');
@@ -22,7 +24,7 @@ export default function Navigation(){
 
       fetchCat()
     }, [])
-    
+
     function classNames(...classes) {
       return classes.filter(Boolean).join(' ')
     }
@@ -76,7 +78,7 @@ export default function Navigation(){
                                     {
                                       () => (
                                         <Link
-                                          className={classNames(window.location.pathname.includes(encodeURI(category)) ? 'bg-black text-white' : '', `hover:bg-gray-700 hover:text-white capitalize px-3 py-2 rounded-md text-sm font-medium transition-all duration-150`)}
+                                          className={classNames(window.location.pathname === encodeURI(category) ? 'bg-black text-white' : '', `hover:bg-gray-700 hover:text-white capitalize px-3 py-2 rounded-md text-sm font-medium transition-all duration-150`)}
                                           to={`/category/${category}`} 
                                           key={category}
                                         >
