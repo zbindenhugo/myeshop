@@ -10,9 +10,7 @@ export default function Navigation(){
     
     const [current, setCurrent] = useState('');
     const [categories, setCategories] = useState([]);
-    const [isOpen, setIsOpen] = useState(false)
-
-    alert(window.location.pathname.split('/'))
+    const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
       const fetchCat = async () => {
