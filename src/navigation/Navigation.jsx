@@ -71,7 +71,7 @@ export default function Navigation(){
                             <Menu.Button name='categories' onClick={(e) => onClickLink(e)} className={classNames(current === 'categories' ? 'bg-gray-900 text-white' : 'text-gray-300' ,' hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-all duration-150')}>
                               Categories
                             </Menu.Button>
-                            <Menu.Items className='fixed top-[7%] left-[40%] bg-gray-800 text-gray-300 rounded-lg p-5 grid grid-flow-row row-auto z-20'>
+                            <Menu.Items className='absolute top-[7%] left-[40%] bg-gray-800 text-gray-300 rounded-lg p-3 grid grid-flow-row row-auto z-20'>
                               {
                                 categories.map((category) => (
                                   <Menu.Item>
