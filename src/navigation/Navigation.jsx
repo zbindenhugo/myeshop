@@ -28,7 +28,9 @@ export default function Navigation(){
     }
     
     function onClickLink (e){
-      setCurrent(e.target.id);
+      setCurrent(e.target.name);
+      if(e.target.name === 'categories')
+        setIsOpen(!isOpen)
     }
       return(
         <div className="min-h-full">
@@ -39,7 +41,7 @@ export default function Navigation(){
                   <div className="flex h-16 items-center justify-between">
                     <div className="flex items-center">
                       <div className="flex-shrink-0 text-white uppercase text-2xl font-bold">
-                          <Link to='/' id='home' onClick={(e) => onClickLink(e)}>
+                          <Link to='/' name='home' onClick={(e) => onClickLink(e)}>
                               Zbind'Amazon
                           </Link>
                       </div>
@@ -47,7 +49,7 @@ export default function Navigation(){
                         <div className="ml-10 flex items-baseline space-x-4">
                           <Link  
                               to='/'
-                              id='home'
+                              name='home'
                               onClick={(e) => onClickLink(e)}
                               className={classNames(current === 'home' ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium transition-all duration-150')}
                               aria-current={current === 'home' ? 'page' : undefined}
@@ -57,7 +59,7 @@ export default function Navigation(){
 
                           <Link  
                               to='/products'
-                              id='products'
+                              name='products'
                               onClick={(e) => onClickLink(e)}
                               className={classNames(current === 'products' ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium transition-all duration-150')}
                               aria-current={current === 'products' ? 'page' : undefined}
@@ -66,7 +68,7 @@ export default function Navigation(){
                           </Link>
                           
                           <Menu>
-                            <Menu.Button onClick={() => setIsOpen(!isOpen)} className='text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-all duration-150'>
+                            <Menu.Button name='categories' onClick={(e) => onClickLink(e)} className={classNames(current === 'categories' ? 'bg-gray-900 text-white' : 'text-gray-300' ,' hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-all duration-150')}>
                               Categories
                             </Menu.Button>
                             <Menu.Items className='fixed top-[7%] left-[40%] bg-gray-800 text-gray-300 rounded-lg p-5 grid grid-flow-row row-auto z-20'>
@@ -74,9 +76,10 @@ export default function Navigation(){
                                 categories.map((category) => (
                                   <Menu.Item>
                                     {
+                                      
                                       () => (
                                         <Link
-                                          className={classNames(window.location.pathname === encodeURI(category) ? 'bg-black text-white' : '', `hover:bg-gray-700 hover:text-white capitalize px-3 py-2 rounded-md text-sm font-medium transition-all duration-150`)}
+                                          className={classNames(window.location.pathname.toLowerCase().split('/')[2] == encodeURI(category) ? 'bg-black text-white' : '', `hover:bg-gray-700 hover:text-white capitalize px-3 py-2 rounded-md text-sm font-medium transition-all duration-150`)}
                                           to={`/category/${category}`} 
                                           key={category}
                                         >
@@ -120,6 +123,7 @@ export default function Navigation(){
                             leaveTo="transform opacity-0 scale-95"
                           >
                             <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                    caca
                             </Menu.Items>
                           </Transition>
                         </Menu>

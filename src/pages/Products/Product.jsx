@@ -101,7 +101,7 @@ export default function Product() {
                                 ))}
                             </div>
                             {' '}
-                            <p className="">{product?.rating?.rate} out of 5 stars <span className='text-slate-400 text-sm'>{product?.rating?.count} reviews</span></p>
+                            <p className="">{product?.rating?.rate}/5 stars <span className='text-slate-400 text-sm'>{product?.rating?.count} reviews</span></p>
                             <a className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500">
                                 
                             </a>
