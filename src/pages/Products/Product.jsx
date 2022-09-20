@@ -1,7 +1,8 @@
 import { RadioGroup } from '@headlessui/react'
 import { StarIcon } from '@heroicons/react/20/solid'
-import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { useContext, useEffect, useState } from 'react'
+import { json, Link, useParams } from 'react-router-dom'
+import { CartContext } from '../../contexts/Contexts'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -11,7 +12,6 @@ export default function Product() {
 
     const [product, setProduct] = useState({})
     const [selectedColor, setSelectedColor] = useState('white')
-    const [selectedSize, setSelectedSize] = useState()
 
     const { id } = useParams();
 
@@ -21,11 +21,19 @@ export default function Product() {
         const json = await datas.json();
 
         setProduct(json);
+        product['color'] = selectedColor
       }
 
       fetchDatas();
     
     }, [id])
+
+    const { addItemCart } = useContext(CartContext);
+
+    const handleColorClick = (color) => {
+        setSelectedColor(color);
+        product['color'] = color;
+    }
 
     return (
         <div>
@@ -121,24 +129,24 @@ export default function Product() {
                         <h3 className="text-xl font-medium text-gray-900 text-left">Color</h3>
                         <div className='grid grid-cols-4 gap-5 mt-3'>
                             <div>
-                                <button onClick={() => setSelectedColor('white')} className={classNames(selectedColor === 'white' ? 'bg-slate-100 ring-1 scale-105' : 'bg-slate-100' , 'rounded-full w-10 h-10 transition-all duration-150 hover:ring-1 hover:bg-slate-100 ring-slate-700 ring-offset-2')} />
+                                <button onClick={() => handleColorClick('white')} className={classNames(selectedColor === 'white' ? 'bg-slate-100 ring-1 scale-105' : 'bg-slate-100' , 'rounded-full w-10 h-10 transition-all duration-150 hover:ring-1 hover:bg-slate-100 ring-slate-700 ring-offset-2')} />
                             </div>
                             <div>
-                                <button onClick={() => setSelectedColor('black')} className={classNames(selectedColor === 'black' ? 'bg-black ring-1 scale-105' : 'bg-slate-900' , 'rounded-full w-10 h-10 transition-all duration-150 hover:ring-1 hover:bg-black ring-slate-700 ring-offset-2')} />
+                                <button onClick={() => handleColorClick('black')} className={classNames(selectedColor === 'black' ? 'bg-black ring-1 scale-105' : 'bg-slate-900' , 'rounded-full w-10 h-10 transition-all duration-150 hover:ring-1 hover:bg-black ring-slate-700 ring-offset-2')} />
                             </div>
                             <div>
-                                <button onClick={() => setSelectedColor('grey')} className={classNames(selectedColor === 'grey' ? 'bg-slate-600 ring-1 scale-105' : 'bg-slate-400' , 'rounded-full w-10 h-10 transition-all duration-150 hover:ring-1 hover:bg-slate-600 ring-slate-800 ring-offset-2')} />
+                                <button onClick={() => handleColorClick('grey')} className={classNames(selectedColor === 'grey' ? 'bg-slate-600 ring-1 scale-105' : 'bg-slate-400' , 'rounded-full w-10 h-10 transition-all duration-150 hover:ring-1 hover:bg-slate-600 ring-slate-800 ring-offset-2')} />
                             </div>
                             <div>
-                                <button onClick={() => setSelectedColor('red')} className={classNames(selectedColor === 'red' ? 'bg-red-600 ring-1 scale-105' : 'bg-red-200' , 'rounded-full w-10 h-10 transition-all duration-150 hover:ring-1 hover:bg-red-600 ring-slate-700 ring-offset-2')} />
+                                <button onClick={() => handleColorClick('red')} className={classNames(selectedColor === 'red' ? 'bg-red-600 ring-1 scale-105' : 'bg-red-200' , 'rounded-full w-10 h-10 transition-all duration-150 hover:ring-1 hover:bg-red-600 ring-slate-700 ring-offset-2')} />
                             </div>
                         </div>
                     </div>
 
                     <div className='mt-52'>
                     <button
-                        type="submit"
                         className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-8 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        onClick={() => addItemCart(product)}
                     >
                         Add to cart
                     </button>

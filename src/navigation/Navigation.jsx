@@ -1,16 +1,21 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { Fragment } from 'react'
+import { Fragment, useContext } from 'react'
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon, BellIcon, XMarkIcon, ShoppingCartIcon } from '@heroicons/react/24/outline'
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { useEffect } from 'react'
+import { CartContext } from '../contexts/Contexts'
+import Product from '../pages/Products/Product'
 
 export default function Navigation(){
     
-    const [current, setCurrent] = useState('');
+    const [current, setCurrent] = useState('home');
     const [categories, setCategories] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
+    const [cartModal, toggleCartModal] = useState(false);
+
+    const { cart } = useContext(CartContext);
 
     useEffect(() => {
       const fetchCat = async () => {
@@ -19,7 +24,6 @@ export default function Navigation(){
 
         setCategories(json);
       }
-
       fetchCat()
     }, [])
 
@@ -32,7 +36,13 @@ export default function Navigation(){
       if(e.target.name === 'categories')
         setIsOpen(!isOpen)
     }
-      return(
+
+    function handleCartClick(e){
+      e.preventDefault();
+      toggleCartModal(!cartModal);
+    }
+
+    return(
         <div className="min-h-full">
           <Disclosure as="nav" className="bg-gray-800">
             {({ open }) => (
@@ -99,11 +109,21 @@ export default function Navigation(){
                       <div className="ml-4 flex items-center md:ml-6">
                         <button
                           type="button"
-                          className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                          className="rounded-full bg-gray-800 p-1 mr-3 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                         >
                           <span className="sr-only">View notifications</span>
                           <BellIcon className="h-6 w-6" aria-hidden="true" />
+                          
                         </button>
+                        <button
+                          type="button"
+                          className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                          onClick={(e) => handleCartClick(e)}
+                        >
+                          <span className="sr-only">View Cart</span>
+                          <ShoppingCartIcon className="h-6 w-6" aria-hidden="true" />
+                        </button>
+                        
 
                         {/* Profile dropdown */}
                         <Menu as="div" className="relative ml-3">
@@ -123,7 +143,7 @@ export default function Navigation(){
                             leaveTo="transform opacity-0 scale-95"
                           >
                             <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                    caca
+                             
                             </Menu.Items>
                           </Transition>
                         </Menu>
@@ -172,6 +192,95 @@ export default function Navigation(){
               </>
             )}
           </Disclosure>
+          <Transition appear show={cartModal} as={Fragment}>
+            <Dialog as="div" className="relative z-10" onClose={() => toggleCartModal(false)}>
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0"
+                enterTo="opacity-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+              >
+                <div className="fixed inset-0 bg-black bg-opacity-25" />
+              </Transition.Child>
+
+              <div className="fixed inset-0 overflow-y-auto">
+                <div className="flex min-h-full items-center justify-center p-4 text-center">
+                  <Transition.Child
+                    as={Fragment}
+                    enter="ease-out duration-300"
+                    enterFrom="opacity-0 scale-95"
+                    enterTo="opacity-100 scale-100"
+                    leave="ease-in duration-200"
+                    leaveFrom="opacity-100 scale-100"
+                    leaveTo="opacity-0 scale-95"
+                  >
+                    <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                      <Dialog.Title
+                        as="h3"
+                        className="text-lg font-medium leading-6 text-gray-900"
+                      >
+                        My Cart
+                      </Dialog.Title>
+                      <div className="mt-4">
+                        <div className="flow-root">
+                          <ul className="-my-4 divide-y divide-gray-200">
+                            {
+                              cart ? cart.map((item) => {
+                                return(
+                                  <li key={item.id} className="flex items-center justify-between py-4">
+                                    <div className="flex items-start">
+                                      <img
+                                        alt={item.description}
+                                        src={item.image}
+                                        className="flex-shrink-0 object-cover w-16 h-16 rounded-lg"
+                                      />
+
+                                      <div className="ml-4">
+                                        <p className="text-sm">{item.title}</p>
+
+                                        <dl className="mt-1 space-y-1 text-xs text-gray-500">
+                                          <div>
+                                            <dt className="inline">Color:</dt>
+                                            <dd className="inline">{' ' + item.color}</dd>
+                                          </div>
+                                        </dl>
+                                      </div>
+                                    </div>
+
+                                    <div>
+                                      <p className="text-sm">
+                                        ${item.price}
+                                        <small className="text-gray-500">x1</small>
+                                      </p>
+                                    </div>
+                                  </li>
+                                )
+                              })
+                              : 
+                              <p>You haven't put any items in cart yet !</p>
+                            }
+                          </ul>
+                        </div>
+                      </div>
+
+                      <div className="mt-4">
+                        <button
+                          type="button"
+                          className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                          onClick={() => toggleCartModal(false)}
+                        >
+                          Go to payment 
+                        </button>
+                      </div>
+                    </Dialog.Panel>
+                  </Transition.Child>
+                </div>
+              </div>
+            </Dialog>
+          </Transition>
         </div>
     )
 }
